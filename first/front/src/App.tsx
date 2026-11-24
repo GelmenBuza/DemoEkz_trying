@@ -200,7 +200,7 @@ export default function App() {
 
         {/* Экран 2: Главный каталог */}
         {screen === "catalog" && (
-          <Catalog initialDataset={initialDataset} products={products}/>
+          <Catalog initialDataset={initialDataset} products={products} orders={orders}/>
         )}
 
         {/* Экран 3: Карточка просмотра товара */}

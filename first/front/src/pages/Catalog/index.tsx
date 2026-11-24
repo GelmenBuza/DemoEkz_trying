@@ -1,6 +1,8 @@
 import ProductCard from '../../components/ProductCard'
+import {catalogLogic} from "../../uttils/catalogLogic.ts";
 
-export default function Catalog({initialDataset, products}) {
+export default function Catalog({initialDataset, products, orders}) {
+    const updatedProducts = catalogLogic(products, orders)
     return (
         <div>
             <div className="page-bar">
@@ -9,9 +11,10 @@ export default function Catalog({initialDataset, products}) {
 
             {/* TODO: добавьте панель поиска, фильтрации (с «Все категории») и сортировки для user !== null */}
             {/* TODO: вычислите скидку 25% и остатки через src/utils/catalogLogic.js и отрендерите ProductCard */}
-            <div className="panel">
-                Загружено товаров из mockData.json: {products.length}. Замените этот блок на список карточек ProductCard.
-                {products.map((product) => (<ProductCard product={product}/>))}
+
+
+            <div className="catalog-list">
+                {updatedProducts.map((product) => (<ProductCard product={product}/>))}
             </div>
         </div>
     )
