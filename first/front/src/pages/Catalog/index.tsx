@@ -1,8 +1,16 @@
 import ProductCard from '../../components/ProductCard'
-import { catalogLogic } from "../../uttils/catalogLogic.ts";
-import { useState } from 'react'
+import {catalogLogic} from "../../uttils/catalogLogic.ts";
+import {useState} from 'react'
 
-export default function Catalog({ initialDataset, products, orders, categories, user, navigateTo, setSelectedProductId }) {
+export default function Catalog({
+                                    initialDataset,
+                                    products,
+                                    orders,
+                                    categories,
+                                    user,
+                                    navigateTo,
+                                    setSelectedProductId
+                                }) {
     const [search, setSearch] = useState('')
     const [filterId, setFilterId] = useState('')
     const [sortType, setSortType] = useState('off')
@@ -13,7 +21,7 @@ export default function Catalog({ initialDataset, products, orders, categories, 
 
     const filteredProducts = updatedProducts
         .filter((product) => {
-            const flags = { filterFlag: true, searchFlag: true }
+            const flags = {filterFlag: true, searchFlag: true}
 
             if (filterId && filterId !== 'Все категории') {
                 flags.filterFlag = product.category_id === parseInt(filterId);
@@ -42,7 +50,7 @@ export default function Catalog({ initialDataset, products, orders, categories, 
         });
 
 
-    function handleClick (id) {
+    function handleClick(id) {
         setSelectedProductId(id)
         navigateTo('detail')
     }
@@ -57,26 +65,22 @@ export default function Catalog({ initialDataset, products, orders, categories, 
             {/* TODO: вычислите скидку 25% и остатки через src/utils/catalogLogic.js и отрендерите ProductCard */}
 
             {user !== null && (
-                <div>
+                <div className='filters-bar'>
+                    <input className='input' onChange={(e) => setSearch(e.target.value)} value={search}
+                           placeholder="Поиск по названию"/>
 
-                    <div className='filters-bar'>
-                        <input className='input' onChange={(e) => setSearch(e.target.value)} value={search} placeholder="Поиск по названию" />
-                    </div>
-                    <div className='filters-bar'>
-                        <select name="" className="select" onChange={(e) => setFilterId(e.target.value)}>
-                            {categoriesArr.map((category, index) => (
-                                <option key={index} value={category?.id || (category === 'Все категории' && '')}>{category?.name || category}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className='filters-bar'>
-                        <select name="" className="select" onChange={e => setSortType(e.target.value)}>
-                            <option value="off">Без сортировки</option>
-                            <option value="toLow">По убыванию</option>
-                            <option value="toTop">По возрастанию</option>
-                        </select>
-                    </div>
+                    <select name="" className="select" onChange={(e) => setFilterId(e.target.value)}>
+                        {categoriesArr.map((category, index) => (
+                            <option key={index}
+                                    value={category?.id || (category === 'Все категории' && '')}>{category?.name || category}</option>
+                        ))}
+                    </select>
 
+                    <select name="" className="select" onChange={e => setSortType(e.target.value)}>
+                        <option value="off">Без сортировки</option>
+                        <option value="toLow">По убыванию</option>
+                        <option value="toTop">По возрастанию</option>
+                    </select>
                 </div>
             )}
 

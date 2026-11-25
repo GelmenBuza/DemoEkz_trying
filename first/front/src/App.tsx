@@ -65,6 +65,7 @@ export default function App() {
   // Черновик текущего заказа и клиент, на которого он оформляется
   const [draftItems, setDraftItems] = useState([]);
   const [targetClient, setTargetClient] = useState(null);
+  console.log(draftItems)
 
   // Единое уведомление (type: "info" | "warning" | "error")
   const [notice, setNotice] = useState(null);

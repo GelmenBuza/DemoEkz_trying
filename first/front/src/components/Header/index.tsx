@@ -37,7 +37,7 @@ export default function Header({ navigateTo, COMPANY_NAME, canManageOrders, user
                             <div className="user-fio">{user.full_name}</div>
                             <div className="user-role">{user.role_name}</div>
                         </div>
-                        <button onClick={() => setDraftItems(null)} onMouseEnter={() => setMouseIn(true)} onMouseLeave={() => setMouseIn(false)}>
+                        <button onClick={() => setDraftItems([])} onMouseEnter={() => setMouseIn(true)} onMouseLeave={() => setMouseIn(false)}>
                             {mouseIn ? <span>Очистить?</span> : <span>Корзина: {draftItems?.length || 0}</span>}
                         </button>
                         <button
