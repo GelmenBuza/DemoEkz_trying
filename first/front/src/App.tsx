@@ -185,32 +185,32 @@ export default function App() {
 
   return (
     <div>
-      <Header navigateTo={navigateTo} COMPANY_NAME={COMPANY_NAME} canManageOrders={canManageOrders} user={user} handleLogout={handleLogout} />
+      <Header navigateTo={navigateTo} COMPANY_NAME={COMPANY_NAME} canManageOrders={canManageOrders} user={user} handleLogout={handleLogout} draftItems={draftItems} setDraftItems={setDraftItems}/>
 
       <main className="container">
         {/* TODO: подключите компонент NoticeBanner для показа notice */}
         {notice && (
-            <NoticeBanner notice={notice} setNotice={setNotice}/>
+          <NoticeBanner notice={notice} setNotice={setNotice} />
         )}
 
         {/* Экран 1: Авторизация */}
         {screen === "login" && (
-          <Login handleBack={handleBack} handleLogin={handleLogin} loginInput={loginInput} setLoginInput={setLoginInput}/>
+          <Login handleBack={handleBack} handleLogin={handleLogin} loginInput={loginInput} setLoginInput={setLoginInput} />
         )}
 
         {/* Экран 2: Главный каталог */}
         {screen === "catalog" && (
-          <Catalog initialDataset={initialDataset} products={products} orders={orders}/>
+          <Catalog initialDataset={initialDataset} products={products} orders={orders} categories={categories} user={user} navigateTo={navigateTo} setSelectedProductId={setSelectedProductId} />
         )}
 
         {/* Экран 3: Карточка просмотра товара */}
         {screen === "detail" && (
-          <Detail selectedProductId={selectedProductId} handleBack={handleBack}/>
+          <Detail selectedProductId={selectedProductId} handleBack={handleBack} products={products} orders={orders} user={user} setDraftItems={setDraftItems} />
         )}
 
         {/* Экран 4: Управление заказами (Менеджер / Администратор) */}
         {screen === "orders" && canManageOrders && (
-          <Orders user={user} handleBack={handleBack}/>
+          <Orders user={user} handleBack={handleBack} />
         )}
       </main>
     </div>

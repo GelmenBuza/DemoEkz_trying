@@ -1,6 +1,11 @@
+import { catalogLogic } from "../../uttils/catalogLogic.ts";
+import ProductDetail from '../../components/ProductDetail' 
 
+export default function Detail({selectedProductId, handleBack, products, orders, user, setDraftItems}) {
 
-export default function Detail({selectedProductId, handleBack}) {
+    const updatedProducts = catalogLogic(products, orders)
+
+    const selctedProduct = products.filter(product => product.id === selectedProductId)[0]
 
     return (
         <div className="panel">
@@ -15,6 +20,7 @@ export default function Detail({selectedProductId, handleBack}) {
                 </button>
             </div>
             {/* TODO: подключите компонент ProductDetailView */}
+            <ProductDetail product={selctedProduct} user={user} setDraftItems={setDraftItems}/>
         </div>
     )
 }

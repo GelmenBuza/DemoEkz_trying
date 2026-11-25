@@ -1,7 +1,8 @@
+import { useState } from "react"
 
 
-export default function Header({navigateTo, COMPANY_NAME, canManageOrders, user, handleLogout}) {
-
+export default function Header({ navigateTo, COMPANY_NAME, canManageOrders, user, handleLogout, draftItems, setDraftItems }) {
+    const [mouseIn, setMouseIn] = useState(false)
 
     return (
         < header className="app-header" >
@@ -36,6 +37,9 @@ export default function Header({navigateTo, COMPANY_NAME, canManageOrders, user,
                             <div className="user-fio">{user.full_name}</div>
                             <div className="user-role">{user.role_name}</div>
                         </div>
+                        <button onClick={() => setDraftItems(null)} onMouseEnter={() => setMouseIn(true)} onMouseLeave={() => setMouseIn(false)}>
+                            {mouseIn ? <span>Очистить?</span> : <span>Корзина: {draftItems?.length || 0}</span>}
+                        </button>
                         <button
                             type="button"
                             className="btn"

@@ -3,7 +3,6 @@ export function catalogLogic(products, orders) {
     const idInOrder = []
 
     const updatedProduct = products
-    console.log(updatedProduct)
 
     orders.forEach(order => {
         if (+order["order_date"].split('-')[1] === month) {
