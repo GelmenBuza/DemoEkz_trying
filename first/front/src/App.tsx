@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Catalog from './pages/Catalog'
 import Detail from './pages/Detail'
 import Orders from './pages/Orders'
+import DraftItemsView from "./components/DraftItemsView";
 
 // Выберите ваш вариант: "variantA" (обувь) или "variantB" (спортинвентарь)
 const ACTIVE_VARIANT = "variantA";
@@ -52,6 +53,9 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [loginInput, setLoginInput] = useState("");
 
+  // Header
+  const [openDraftMenu, setOpenDraftMenu] = useState(false)
+
   // Многоэкранная навигация: "catalog" | "detail" | "login" | "orders"
   const [screen, setScreen] = useState("catalog");
   const [prevScreen, setPrevScreen] = useState("catalog");
@@ -65,7 +69,6 @@ export default function App() {
   // Черновик текущего заказа и клиент, на которого он оформляется
   const [draftItems, setDraftItems] = useState([]);
   const [targetClient, setTargetClient] = useState(null);
-  console.log(draftItems)
 
   // Единое уведомление (type: "info" | "warning" | "error")
   const [notice, setNotice] = useState(null);
@@ -136,9 +139,24 @@ export default function App() {
 
   // Подтверждение заказа (допишите списание остатков в массиве products)
   const handleConfirmOrder = () => {
+
     const orderOwner = targetClient || user;
     if (!orderOwner || draftItems.length === 0) {
       return;
+    }
+
+    for (const item of draftItems) {
+      const product = products.find((p) => p.id === item.product_id);
+      const variant = product?.variants.find((v) => v.id === item.variant_id);
+
+      if (!variant || variant.quantity < item.quantity) {
+        setNotice({
+          type: "error",
+          title: "Много товара",
+          message: `В заказе товара ${item.product_name} больше чем в наличии, очистите корзину и выберите заново`,
+        });
+        return;
+      }
     }
 
     const nextOrderId =
@@ -167,7 +185,27 @@ export default function App() {
     // уменьшив quantity у каждого заказанного варианта (variant_id)
     // на заказанное количество, чтобы остатки в каталоге пересчитались.
 
-    // setProducts(prev => {})
+    setProducts((prev) =>
+      prev.map((product) => {
+        const hasOrderedItems = draftItems.some(
+          (item) => item.product_id === product.id
+        );
+        if (!hasOrderedItems) return product;
+
+        return {
+          ...product,
+          variants: product.variants.map((v) => {
+            const orderedItem = draftItems.find((item) => item.variant_id === v.id);
+            if (!orderedItem) return v;
+
+            return {
+              ...v,
+              quantity: v.quantity - orderedItem.quantity,
+            };
+          }),
+        };
+      })
+    );
 
     setOrders((prev) => [newOrder, ...prev]);
     setDraftItems([]);
@@ -186,8 +224,8 @@ export default function App() {
 
   return (
     <div>
-      <Header navigateTo={navigateTo} COMPANY_NAME={COMPANY_NAME} canManageOrders={canManageOrders} user={user} handleLogout={handleLogout} draftItems={draftItems} setDraftItems={setDraftItems}/>
-
+      <Header navigateTo={navigateTo} COMPANY_NAME={COMPANY_NAME} canManageOrders={canManageOrders} user={user} handleLogout={handleLogout} setOpenDraftMenu={setOpenDraftMenu} />
+      {openDraftMenu && <DraftItemsView draftItems={draftItems} setDraftItems={setDraftItems} setOpenDraftMenu={setOpenDraftMenu} handleConfirmOrder={handleConfirmOrder} />}
       <main className="container">
         {/* TODO: подключите компонент NoticeBanner для показа notice */}
         {notice && (
@@ -211,7 +249,7 @@ export default function App() {
 
         {/* Экран 4: Управление заказами (Менеджер / Администратор) */}
         {screen === "orders" && canManageOrders && (
-          <Orders user={user} handleBack={handleBack} />
+          <Orders user={user} handleBack={handleBack} orders={orders} setOrders={setOrders} products={products} setProducts={setProducts} userRole={user.role_code} />
         )}
       </main>
     </div>

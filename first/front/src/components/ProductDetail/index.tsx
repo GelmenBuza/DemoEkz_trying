@@ -50,7 +50,7 @@ export default function ProductDetail({product, user, setDraftItems}) {
 
     return (
         <div className="panel detail-grid">
-            <img src={product.image} alt={product.name} className="detail-image"/>
+            <img src={product.image || './picture.png'} alt={product.name} className="detail-image"/>
             <div>
                 <h1 className="product-title">{product.name}</h1>
                 <p className="product-meta">Категория: {product.category_name}</p>

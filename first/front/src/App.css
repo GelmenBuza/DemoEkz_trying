@@ -331,7 +331,7 @@ body {
   border: 1px solid var(--border);
   background: #ffffff;
   cursor: pointer;
-  color:#000000;
+  color: #000000;
 }
 
 .size-btn.active {
@@ -383,6 +383,7 @@ body {
 }
 
 @media (max-width: 768px) {
+
   .filters-bar,
   .product-card,
   .detail-grid {
@@ -398,4 +399,20 @@ body {
     align-items: flex-start;
     text-align: left;
   }
+}
+
+
+.modal-bg {
+  position: fixed;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  background-color: #00000039;
 }
